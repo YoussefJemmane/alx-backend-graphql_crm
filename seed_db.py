@@ -5,7 +5,7 @@ import django
 from decimal import Decimal
 
 # Setup Django
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'alx-backend-graphql_crm.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'alx_backend_graphql_crm.settings')
 django.setup()
 
 from crm.models import Customer, Product, Order

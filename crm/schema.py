@@ -15,16 +15,22 @@ class CustomerType(DjangoObjectType):
     class Meta:
         model = Customer
         fields = ('id', 'name', 'email', 'phone', 'created_at', 'updated_at')
+        filter_fields = ['name', 'email', 'created_at', 'phone']
+        interfaces = (graphene.relay.Node, )
 
 class ProductType(DjangoObjectType):
     class Meta:
         model = Product
         fields = ('id', 'name', 'price', 'stock', 'created_at', 'updated_at')
+        filter_fields = ['name', 'price', 'stock']
+        interfaces = (graphene.relay.Node, )
 
 class OrderType(DjangoObjectType):
     class Meta:
         model = Order
         fields = ('id', 'customer', 'products', 'total_amount', 'order_date', 'created_at', 'updated_at')
+        filter_fields = ['total_amount', 'order_date']
+        interfaces = (graphene.relay.Node, )
 
 # Input Types
 class CustomerInput(graphene.InputObjectType):
