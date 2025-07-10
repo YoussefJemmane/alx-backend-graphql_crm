@@ -73,6 +73,11 @@ class CreateOrderResponse(graphene.ObjectType):
     message = graphene.String()
     errors = graphene.List(ErrorType)
 
+class UpdateLowStockProductsResponse(graphene.ObjectType):
+    products = graphene.List(ProductType)
+    message = graphene.String()
+    errors = graphene.List(ErrorType)
+
 # Mutations
 class CreateCustomer(graphene.Mutation):
     class Arguments:
@@ -190,6 +195,33 @@ class CreateProduct(graphene.Mutation):
                 errors=[ErrorType(field="general", message=str(e))]
             )
 
+class UpdateLowStockProducts(graphene.Mutation):
+    Output = UpdateLowStockProductsResponse
+
+    def mutate(self, info):
+        errors = []
+
+        # Find products with stock < 10
+        low_stock_products = Product.objects.filter(stock__lt=10)
+        updated_products = []
+
+        for product in low_stock_products:
+            product.stock += 10
+            product.save()
+            updated_products.append(product)
+
+        if not updated_products:
+            return UpdateLowStockProductsResponse(
+                message="No products were updated",
+                errors=errors
+            )
+
+        return UpdateLowStockProductsResponse(
+            products=updated_products,
+            message="Low stock products updated successfully",
+            errors=errors
+        )
+
 class CreateOrder(graphene.Mutation):
     class Arguments:
         input = OrderInput(required=True)
@@ -277,3 +309,4 @@ class Mutation(graphene.ObjectType):
     bulk_create_customers = BulkCreateCustomers.Field()
     create_product = CreateProduct.Field()
     create_order = CreateOrder.Field()
+    update_low_stock_products = UpdateLowStockProducts.Field()
