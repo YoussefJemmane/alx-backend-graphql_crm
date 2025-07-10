@@ -68,7 +68,7 @@ def update_low_stock():
             products = mutation_data.get('products', [])
             
             # Log updated products
-            with open('/tmp/low_stock_updates_log.txt', 'a') as log_file:
+            with open('/tmp/lowstockupdates_log.txt', 'a') as log_file:
                 if products:
                     log_file.write(f"{timestamp} - Updated low stock products:\n")
                     for product in products:
@@ -76,9 +76,9 @@ def update_low_stock():
                 else:
                     log_file.write(f"{timestamp} - No low stock products to update\n")
         else:
-            with open('/tmp/low_stock_updates_log.txt', 'a') as log_file:
+            with open('/tmp/lowstockupdates_log.txt', 'a') as log_file:
                 log_file.write(f"{timestamp} - GraphQL mutation failed: HTTP {response.status_code}\n")
                 
     except Exception as e:
-        with open('/tmp/low_stock_updates_log.txt', 'a') as log_file:
+        with open('/tmp/lowstockupdates_log.txt', 'a') as log_file:
             log_file.write(f"{timestamp} - Error updating low stock: {str(e)}\n")

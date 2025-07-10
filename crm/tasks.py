@@ -56,19 +56,19 @@ def generate_crm_report():
             report = f"{timestamp} - Report: {total_customers} customers, {total_orders} orders, {total_revenue} revenue"
             
             # Log to file
-            with open('/tmp/crm_report_log.txt', 'a') as log_file:
+            with open('/tmp/crmreportlog.txt', 'a') as log_file:
                 log_file.write(report + '\n')
                 
             return f"CRM report generated successfully: {report}"
             
         else:
             error_msg = f"{timestamp} - GraphQL query failed: HTTP {response.status_code}"
-            with open('/tmp/crm_report_log.txt', 'a') as log_file:
+            with open('/tmp/crmreportlog.txt', 'a') as log_file:
                 log_file.write(error_msg + '\n')
             return error_msg
             
     except Exception as e:
         error_msg = f"{timestamp} - Error generating CRM report: {str(e)}"
-        with open('/tmp/crm_report_log.txt', 'a') as log_file:
+        with open('/tmp/crmreportlog.txt', 'a') as log_file:
             log_file.write(error_msg + '\n')
         return error_msg

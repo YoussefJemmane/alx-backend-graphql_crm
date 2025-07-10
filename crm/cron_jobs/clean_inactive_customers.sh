@@ -8,6 +8,7 @@ PROJECT_DIR="$(dirname "$(dirname "$SCRIPT_DIR")")"
 if [ -d "$PROJECT_DIR" ]; then
     cd "$PROJECT_DIR"
     echo "Changed to project directory: $(pwd)"
+    echo "Current working directory (cwd): $(pwd)"
 else
     echo "Project directory not found: $PROJECT_DIR"
     exit 1
