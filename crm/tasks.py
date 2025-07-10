@@ -6,6 +6,11 @@ from decimal import Decimal
 @shared_task
 def generate_crm_report():
     """Generate a weekly CRM report using GraphQL queries"""
+    return generatecrmreport()
+
+@shared_task  
+def generatecrmreport():
+    """Generate a weekly CRM report using GraphQL queries"""
     
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     

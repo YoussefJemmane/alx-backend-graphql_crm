@@ -116,8 +116,8 @@ The following log files are created in `/tmp/`:
 - `/tmp/customer_cleanup_log.txt` - Customer cleanup logs
 - `/tmp/order_reminders_log.txt` - Order reminder logs
 - `/tmp/crm_heartbeat_log.txt` - System heartbeat logs
-- `/tmp/low_stock_updates_log.txt` - Low stock update logs
-- `/tmp/crm_report_log.txt` - Weekly CRM report logs
+- `/tmp/lowstockupdates_log.txt` - Low stock update logs
+- `/tmp/crmreportlog.txt` - Weekly CRM report logs
 
 ## Verification
 
@@ -149,7 +149,7 @@ Check the log files periodically to ensure all scheduled tasks are running:
 
 ```bash
 tail -f /tmp/crm_heartbeat_log.txt
-tail -f /tmp/crm_report_log.txt
+tail -f /tmp/crmreportlog.txt
 ```
 
 ## Troubleshooting
