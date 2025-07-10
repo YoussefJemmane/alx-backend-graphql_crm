@@ -1,9 +1,18 @@
 import datetime
-import requests
+from gql import gql, Client
+from gql.transport.requests import RequestsHTTPTransport
+
+# Set up the GraphQL client
+transport = RequestsHTTPTransport(
+    url='http://localhost:8000/graphql',
+    verify=True,
+    retries=3,
+)
+client = Client(transport=transport, fetch_schema_from_transport=True)
 
 def get_pending_orders():
     """Get orders from the last 7 days using GraphQL"""
-    query = '''
+    query = gql('''
     query {
         allOrders {
             edges {
@@ -17,35 +26,26 @@ def get_pending_orders():
             }
         }
     }
-    '''
+    ''')
     
     try:
-        response = requests.post(
-            'http://localhost:8000/graphql',
-            json={'query': query},
-            timeout=10
-        )
+        # Execute the query
+        result = client.execute(query)
+        orders = result.get('allOrders', {}).get('edges', [])
         
-        if response.status_code == 200:
-            data = response.json()
-            orders = data.get('data', {}).get('allOrders', {}).get('edges', [])
+        # Filter orders from last 7 days
+        week_ago = datetime.datetime.now() - datetime.timedelta(days=7)
+        recent_orders = []
+        
+        for order in orders:
+            order_date_str = order['node']['orderDate']
+            order_date = datetime.datetime.fromisoformat(order_date_str.replace('Z', '+00:00'))
             
-            # Filter orders from last 7 days
-            week_ago = datetime.datetime.now() - datetime.timedelta(days=7)
-            recent_orders = []
-            
-            for order in orders:
-                order_date_str = order['node']['orderDate']
-                order_date = datetime.datetime.fromisoformat(order_date_str.replace('Z', '+00:00'))
-                
-                if order_date >= week_ago:
-                    recent_orders.append(order)
-            
-            return recent_orders
-        else:
-            print(f"GraphQL query failed: HTTP {response.status_code}")
-            return []
-            
+            if order_date >= week_ago:
+                recent_orders.append(order)
+        
+        return recent_orders
+        
     except Exception as e:
         print(f"Error querying GraphQL: {str(e)}")
         return []

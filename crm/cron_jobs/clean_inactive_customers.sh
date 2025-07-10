@@ -1,7 +1,23 @@
 #!/bin/bash
 
+# Get the directory where this script is located
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_DIR="$(dirname "$(dirname "$SCRIPT_DIR")")"
+
 # Navigate to the project directory
-cd /home/joemane/ALX/alx-backend-graphql_crm
+if [ -d "$PROJECT_DIR" ]; then
+    cd "$PROJECT_DIR"
+    echo "Changed to project directory: $(pwd)"
+else
+    echo "Project directory not found: $PROJECT_DIR"
+    exit 1
+fi
+
+# Check if manage.py exists
+if [ ! -f "manage.py" ]; then
+    echo "manage.py not found in current directory: $(pwd)"
+    exit 1
+fi
 
 # Execute Django management command to delete inactive customers
 DELETED_COUNT=$(python manage.py shell -c "
